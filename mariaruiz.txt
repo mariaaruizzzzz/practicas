@@ -1,0 +1,86 @@
+    1  cd Desktop
+    2  ls -1
+    3  cd Escritorio 
+    4  mkdir bioinfo
+    5  cd bioinfo
+    6  mkdir practicas
+    7  cd practicas
+    8  mkdir doc
+    9  cd doc
+   10  mkdir references.bib
+   11  cd ..
+   12  ls -1
+   13  mkdir data
+   14  ls -1
+   15  mkdir results
+   16  cd results
+   17  mkdir 2026-01-29
+   18  cd 2026-02-29
+   19  cd 2026-01-29
+   20  mkdir README.md
+   21  cd ..
+   22  cd 2026-01-29
+   23  cd results
+   24  cd 2026-01-29
+   25  cp ../../../Descargas/guion-es.qmd README.qmd
+   26  rm -r README.md
+   27  cd $HOME
+   28  ls -1
+   29  sudo apt install emboss exonerate wget muscle
+   30  sudo apt update
+   31  sudo apt install git build-essential autoconf automake libtool python3 r-base
+   32  sudo apt install emboss exonerate wget muscle
+   33  git --version
+   34  history > mariaruiz.txt
+   35  git config --global user.name "mariaruiz"
+   36  git config --global user.email "...ruizven2@alumni.uv.es"
+   37  git config --global core.editor "nano -w"
+   38  git config --global init.defaultBranch cepa
+   39  ls -1
+   40  cd practicas
+   41  ls -1
+   42  cd bioinfo
+   43  cd practicas
+   44  git init
+   45  git status
+   46  cd results
+   47  mkdir 2026-02-03
+   48  cd 2026-02-03
+   49  git add guion2.qmd
+   50  git status
+   51  git commit -m "Añadido el guión de la Práctica 2."
+   52  git status
+   53  git log 
+   54  ls -1
+   55  cd ..
+   56  mkdir .gitignore
+   57  rm -r .gitignore
+   58  nano .gitignore
+   59  nano. LICENSE.txt
+   60  nano. license.txt
+   61  nano license.txt
+   62  git init
+   63  git status
+   64  git commit -m "Licencia añadida"
+   65  git add license.txt
+   66  git commit -m "Licencia añadida"
+   67  git remote -v
+   68  ssh-keygen -t ed25519 -C "ruizven2@alumni.uv.es"
+   69  cat ~/.ssh/ed25519.pub
+   70  cat ~/.ssh/id_ed25519.pub
+   71  git remote add origin git@github.com:mariaaruizzzzz/practicas.git
+   72  git push -u origin cepa
+   73  git pull
+   74  nano. README.md
+   75  nano README.md
+   76  git add README
+   77  git status
+   78  nano README.md
+   79  git add README.md
+   80  git commit -m "Añadido README definitivo"
+   81  git push
+   82  git add .gitignore
+   83  git add -f .gitignore
+   84  git commit -m "Subiendo el gitignore"
+   85  git push
+   86  history > mariaruiz.txt
