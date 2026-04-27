@@ -6,23 +6,40 @@ format:
      fig-height: 12
 editor: visual
 ---
+##1. Introducción y Preparación de Datos
+
+En esta práctica se ha utilizado el paquete phangorn para inferir filogenias a partir de secuencias de ADN mitocondrial (mtDNA). El objetivo es obtener una filogenia calibrada que incluya humanos modernos, neandertales, denisovanos y otros primates.
 
 ```{r}
 library(phangorn)
 mtdna <- read.phyDat('../../data/mtDNA.fasta', format = 'fasta')
 ```
 
+##Ejercicio 1. 
+
+¿Número de secuencias? 
+El objeto contiene 42 secuencias.
+
+¿Longitud del alineamiento? 
+La longitud es de 16,603 posiciones.
+
+¿Función para nombres? 
+Se utiliza la función names(mtdna) o mt_nj$tip.label.
+
 ```{r}
 length(mtdna)
 ```
 
 ```{r}
-ncol(as.matrix(mtdna))
+ncol(as.DNAbin(mtdna))
 ```
 
 ```{r}
 names(mtdna)
 ```
+
+##2. Árboles basados en Distancias
+Se han generado dos árboles rápidos: Neighbor-Joining (NJ) y UPGMA, utilizando el modelo F81 para el cálculo de distancias.
 
 ```{r}
 distancias <- dist.ml(mtdna, model = 'F81')
@@ -30,7 +47,11 @@ mt_nj    <- NJ(distancias)
 mt_upgma <- upgma(distancias)
 ```
 
-Ejercicio 2:
+##Ejercicio 2:Estructura y visualización
+
+Clase de los objetos: Son de clase phylo.
+
+Funciones de escala: add.scale.bar() añade una barra que indica la escala de sustituciones por sitio. axisPhylo() dibuja un eje con la distancia evolutiva en la base del gráfico.
 
 ```{r}
 class(mt_nj)
@@ -45,13 +66,9 @@ str(mt_nj)
 plot(mt_nj)
 plot(mt_upgma)
 ```
+##4. Enraizado y Calibración Temporal
 
-
-- add.scale.bar(): añade una barra de escala al árbol filogenético, que indica la longitud de las ramas en términos de distancia evolutiva
-
-- axisPhylo(): añade un eje numérico al gráfico del árbol, permitiendo interpretar cuantitativamente las distancias evolutivas entre las secuencias.
-
-  
+Como nuestras secuencias incluyen muestras arcaicas (fósiles), el enraizado en el punto medio no es ideal. Usamos la regresión "raíz a punta" (RTT).
 
 ```{r}
 is.rooted(mt_nj)
@@ -93,6 +110,8 @@ fechas
 mt_nj_rtt <- rtt(mt_nj, tip.dates = fechas, objective = 'rms')
 ```
 
+##Ejercicio 3: Regresión RTT
+
 ¿Se corresponden bien las distancias con las dataciones?
 
 Sí, en general las secuencias más antiguas acumulan más cambios que las modernas, mostrando una correspondencia aproximada.
@@ -104,6 +123,10 @@ Algunas secuencias arcaicas, principalmente neandertales y denisovanas, muestran
 ¿Por qué puede haber discrepancias?
 
 Por variación en la tasa de evolución, errores en datación o secuenciación, efectos demográficos, selección natural o saturación de mutaciones.
+
+##5. Análisis de Distancias Medias
+
+Calculamos cuánto se parecen los grupos principales (Modernos, Neandertales, Chimpancés).
 
 ```{r}
 distMat <- as.matrix(distancias)
@@ -157,3 +180,17 @@ dist_hum_chimp
 dist_hum_chimp / dist_hum_nean
 ```
 
+##Ejercicio 4: Comparativa de distancias
+
+¿Cuántas veces mayor es la distancia entre humanos y chimpancés que entre humanos y neandertales?
+
+    Resultados obtenidos:
+
+        Distancia media Humano-Neandertal: 0.0121
+
+        Distancia media Humano-Chimpancé: 0.0910
+
+        Proporción calculada: 7.49
+
+Interpretación: La distancia genética entre humanos y chimpancés es aproximadamente 7.5 veces mayor que la que nos separa de los neandertales. Esto confirma que los neandertales son genéticamente mucho más próximos a los humanos modernos que cualquier otro primate vivo, situándose a una distancia evolutiva relativamente pequeña.
+    :::

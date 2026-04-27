@@ -99,6 +99,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p>##1. Introducción y Preparación de Datos</p>
+<p>En esta práctica se ha utilizado el paquete phangorn para inferir filogenias a partir de secuencias de ADN mitocondrial (mtDNA). El objetivo es obtener una filogenia calibrada que incluya humanos modernos, neandertales, denisovanos y otros primates.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phangorn)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
@@ -106,6 +108,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mtdna <span class="ot">&lt;-</span> <span class="fu">read.phyDat</span>(<span class="st">'../../data/mtDNA.fasta'</span>, <span class="at">format =</span> <span class="st">'fasta'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>##Ejercicio 1.</p>
+<p>¿Número de secuencias? El objeto contiene 42 secuencias.</p>
+<p>¿Longitud del alineamiento? La longitud es de 16,603 posiciones.</p>
+<p>¿Función para nombres? Se utiliza la función names(mtdna) o mt_nj$tip.label.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(mtdna)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -113,9 +119,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(<span class="fu">as.matrix</span>(mtdna))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(<span class="fu">as.DNAbin</span>(mtdna))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1</code></pre>
+<pre><code>[1] 16603</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -144,12 +150,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 [41] "H.s.modern_J01415"           "H.s.modern_FJ236981"        </code></pre>
 </div>
 </div>
+<p>##2. Árboles basados en Distancias Se han generado dos árboles rápidos: Neighbor-Joining (NJ) y UPGMA, utilizando el modelo F81 para el cálculo de distancias.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>distancias <span class="ot">&lt;-</span> <span class="fu">dist.ml</span>(mtdna, <span class="at">model =</span> <span class="st">'F81'</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mt_nj    <span class="ot">&lt;-</span> <span class="fu">NJ</span>(distancias)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>mt_upgma <span class="ot">&lt;-</span> <span class="fu">upgma</span>(distancias)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Ejercicio 2:</p>
+<p>##Ejercicio 2:Estructura y visualización</p>
+<p>Clase de los objetos: Son de clase phylo.</p>
+<p>Funciones de escala: add.scale.bar() añade una barra que indica la escala de sustituciones por sitio. axisPhylo() dibuja un eje con la distancia evolutiva en la base del gráfico.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(mt_nj)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -190,10 +199,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<ul>
-<li><p>add.scale.bar(): añade una barra de escala al árbol filogenético, que indica la longitud de las ramas en términos de distancia evolutiva</p></li>
-<li><p>axisPhylo(): añade un eje numérico al gráfico del árbol, permitiendo interpretar cuantitativamente las distancias evolutivas entre las secuencias.</p></li>
-</ul>
+<p>##4. Enraizado y Calibración Temporal</p>
+<p>Como nuestras secuencias incluyen muestras arcaicas (fósiles), el enraizado en el punto medio no es ideal. Usamos la regresión “raíz a punta” (RTT).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.rooted</span>(mt_nj)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -232,6 +239,157 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fechas <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>            <span class="sc">-</span><span class="dv">400000</span>,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>            <span class="sc">-</span><span class="dv">39000</span>, <span class="sc">-</span><span class="dv">50000</span>, <span class="sc">-</span><span class="dv">110000</span>, <span class="sc">-</span><span class="dv">110000</span>,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>            <span class="sc">-</span><span class="dv">39820</span>, <span class="sc">-</span><span class="dv">40096</span>, <span class="sc">-</span><span class="dv">38515</span>, <span class="sc">-</span><span class="dv">38310</span>, <span class="sc">-</span><span class="dv">39000</span>, <span class="sc">-</span><span class="dv">40000</span>, <span class="sc">-</span><span class="dv">41210</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>            <span class="sc">-</span><span class="dv">42430</span>, <span class="sc">-</span><span class="dv">42540</span>, <span class="sc">-</span><span class="dv">43230</span>, <span class="sc">-</span><span class="dv">43780</span>, <span class="sc">-</span><span class="dv">44290</span>, <span class="sc">-</span><span class="dv">44770</span>, <span class="sc">-</span><span class="dv">49000</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>            <span class="sc">-</span><span class="dv">50000</span>, <span class="sc">-</span><span class="dv">82752</span>, <span class="sc">-</span><span class="dv">65000</span>, <span class="sc">-</span><span class="dv">122287</span>, <span class="sc">-</span><span class="dv">110450</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>            <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>fechas <span class="ot">&lt;-</span> <span class="fu">setNames</span>(fechas, mt_nj<span class="sc">$</span>tip.label)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>fechas</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           G.gorilla_D38114      P.troglodytes_JF727212 
+                          0                           0 
+     P.troglodytes_JN191207      P.troglodytes_JF727168 
+                          0                           0 
+     P.troglodytes_HM068590         P.paniscus_KX211934 
+                          0                           0 
+        P.paniscus_KX211928         P.paniscus_GU189658 
+                          0                           0 
+        P.paniscus_GU189664 H.heidelbergensis_NC_023100 
+                          0                     -400000 
+     H.s.denisova_NC_013993       H.s.denisova_FR695060 
+                     -39000                      -50000 
+      H.s.denisova_KX663333       H.s.denisova_KT780370 
+                    -110000                     -110000 
+    H.s.neandertal_KX198085     H.s.neandertal_KX198086 
+                     -39820                      -40096 
+    H.s.neandertal_MG025538    H.s.neandertal_NC_011137 
+                     -38515                      -38310 
+    H.s.neandertal_FM865409     H.s.neandertal_FM865407 
+                     -39000                      -40000 
+    H.s.neandertal_KX198088     H.s.neandertal_KX198083 
+                     -41210                      -42430 
+    H.s.neandertal_MG025540     H.s.neandertal_MG025536 
+                     -42540                      -43230 
+    H.s.neandertal_MG025537     H.s.neandertal_KX198087 
+                     -43780                      -44290 
+    H.s.neandertal_KX198082     H.s.neandertal_FM865408 
+                     -44770                      -49000 
+    H.s.neandertal_KU131206     H.s.neandertal_KF982693 
+                     -50000                      -82752 
+    H.s.neandertal_FM865411     H.s.neandertal_KY751400 
+                     -65000                     -122287 
+    H.s.neandertal_MK033602         H.s.modern_EU092846 
+                    -110450                           0 
+        H.s.modern_EU092665         H.s.modern_JQ045086 
+                          0                           0 
+        H.s.modern_DQ779927         H.s.modern_DQ779932 
+                          0                           0 
+        H.s.modern_AP008640         H.s.modern_AY495317 
+                          0                           0 
+          H.s.modern_J01415         H.s.modern_FJ236981 
+                          0                           0 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>mt_nj_rtt <span class="ot">&lt;-</span> <span class="fu">rtt</span>(mt_nj, <span class="at">tip.dates =</span> fechas, <span class="at">objective =</span> <span class="st">'rms'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>##Ejercicio 3: Regresión RTT</p>
+<p>¿Se corresponden bien las distancias con las dataciones?</p>
+<p>Sí, en general las secuencias más antiguas acumulan más cambios que las modernas, mostrando una correspondencia aproximada.</p>
+<p>¿Qué secuencias se ajustan menos a su edad?</p>
+<p>Algunas secuencias arcaicas, principalmente neandertales y denisovanas, muestran más o menos cambios de lo esperado.</p>
+<p>¿Por qué puede haber discrepancias?</p>
+<p>Por variación en la tasa de evolución, errores en datación o secuenciación, efectos demográficos, selección natural o saturación de mutaciones.</p>
+<p>##5. Análisis de Distancias Medias</p>
+<p>Calculamos cuánto se parecen los grupos principales (Modernos, Neandertales, Chimpancés).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>distMat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(distancias)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>modernos     <span class="ot">&lt;-</span> <span class="fu">startsWith</span>(<span class="fu">colnames</span>(distMat), <span class="st">'H.s.modern'</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>neandertales <span class="ot">&lt;-</span> <span class="fu">startsWith</span>(<span class="fu">colnames</span>(distMat), <span class="st">'H.s.neandertal'</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>denisovanos  <span class="ot">&lt;-</span> <span class="fu">startsWith</span>(<span class="fu">colnames</span>(distMat), <span class="st">'H.s.denisova'</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>chimpances   <span class="ot">&lt;-</span> <span class="fu">startsWith</span>(<span class="fu">colnames</span>(distMat), <span class="st">'P.troglodytes'</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>bonobos      <span class="ot">&lt;-</span> <span class="fu">startsWith</span>(<span class="fu">colnames</span>(distMat), <span class="st">'P.paniscus'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(distMat[modernos, neandertales])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01214282</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(distMat[modernos, neandertales])  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01214282</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Humanos y Denisovanos</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(distMat[modernos, denisovanos])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02250501</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Humanos y Chimpancés</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(distMat[modernos, chimpances])   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09104153</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Humanos y Bonobos</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(distMat[modernos, bonobos])       </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09239182</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Neandertales y Denisovanos</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(distMat[neandertales, denisovanos])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02201398</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Neandertales y Chimpancés</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(distMat[neandertales, chimpances]) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09041225</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dentro de humanos modernos</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> distMat[modernos, modernos]</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>z[z <span class="sc">==</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(z, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.003747961</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>dist_hum_nean <span class="ot">&lt;-</span> <span class="fu">mean</span>(distMat[modernos, neandertales])</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>dist_hum_nean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01214282</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>dist_hum_chimp <span class="ot">&lt;-</span> <span class="fu">mean</span>(distMat[modernos, chimpances])</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>dist_hum_chimp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09104153</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>dist_hum_chimp <span class="sc">/</span> dist_hum_nean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.497561</code></pre>
+</div>
+</div>
+<p>##Ejercicio 4: Comparativa de distancias</p>
+<p>¿Cuántas veces mayor es la distancia entre humanos y chimpancés que entre humanos y neandertales?</p>
+<pre><code>Resultados obtenidos:
+
+    Distancia media Humano-Neandertal: 0.0121
+
+    Distancia media Humano-Chimpancé: 0.0910
+
+    Proporción calculada: 7.49</code></pre>
+<p>Interpretación: La distancia genética entre humanos y chimpancés es aproximadamente 7.5 veces mayor que la que nos separa de los neandertales. Esto confirma que los neandertales son genéticamente mucho más próximos a los humanos modernos que cualquier otro primate vivo, situándose a una distancia evolutiva relativamente pequeña. :::</p>
 
 </main>
 <!-- /main column -->
