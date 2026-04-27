@@ -3,7 +3,7 @@ title: "Búsquedas programáticas en Interpro"
 lang: es
 date: today
 execute: 
-  output: false
+  output: true
   error: true
 engine: knitr
 bibliography: ../../doc/references.bib
@@ -87,9 +87,7 @@ Podemos consultar el número de registros de tipo *entry* en la URL
 }
 ```
 
-La función `fromJSON` del paquete `jsonlite` nos permite guardar este tipo de
-datos en una lista de listas. En R, podemos acceder a los elementos de una
-lista con la función *doble corchete* `[[`. 
+La función `fromJSON` del paquete `jsonlite` nos permite guardar este tipo de datos en una lista de listas. En R, podemos acceder a los elementos de una lista con la función *doble corchete* `[[`. 
 
 ```{r}
 registros <- fromJSON(paste0(API, 'entry'))
@@ -99,9 +97,7 @@ registros[[1]][['member_databases']]
 :::{.callout-note icon=false}
 ## Ejercicio 1
 Construye las URLs necesarias para determinar el número de registros del resto
-de tipos: *protein*, *structure*, *set*, y *proteome*. Fíjate en las posibles
-fuentes de cada tipo de datos, e intenta guardar la información en variables de
-tu sesión de R.
+de tipos: *protein*, *structure*, *set*, y *proteome*. Fíjate en las posibles fuentes de cada tipo de datos, e intenta guardar la información en variables de tu sesión de R.
 :::
 ```{r}
 proteinas <- fromJSON(paste0(API, 'protein'))
@@ -111,9 +107,7 @@ proteomas <- fromJSON(paste0(API, 'proteome'))
 taxonomias <- fromJSON(paste0(API, 'taxonomy'))
 ```
 # Lista de datos de algún tipo
-Si además del tipo de datos (*entry*, *protein*, *taxonomy*...), añadimos a la
-URL la *fuente* o base de datos de origen que queremos consultar, obtendremos la lista
-(completa?) de los registros de ese tipo provenientes de *esa* base de datos. 
+Si además del tipo de datos (*entry*, *protein*, *taxonomy*...), añadimos a la URL la *fuente* o base de datos de origen que queremos consultar, obtendremos la lista (completa?) de los registros de ese tipo provenientes de *esa* base de datos. 
 Consulta los ejemplos siguientes:
 
 - https://www.ebi.ac.uk/interpro/api/entry/interpro
@@ -121,12 +115,9 @@ Consulta los ejemplos siguientes:
 - https://www.ebi.ac.uk/interpro/api/protein/reviewed
 - https://www.ebi.ac.uk/interpro/api/taxonomy/uniprot
 
-Pero, para no saturar los servidores, InterPro sólo devuelve los 20 primeros
-registros de cada consulta, y ofrece una nueva URL (*next*) para poder ver
-o descargar los 20 siguientes.
+Pero, para no saturar los servidores, InterPro sólo devuelve los 20 primeros registros de cada consulta, y ofrece una nueva URL (*next*) para poder ver o descargar los 20 siguientes.
 
-A continuación, usamos la función `fromJSON()` de `jsonlite` para descargar los
-20 primeros registros de tipo Pfam y exploramos el resultado.
+A continuación, usamos la función `fromJSON()` de `jsonlite` para descargar los 20 primeros registros de tipo Pfam y exploramos el resultado.
 
 ```{r}
 pfam01 <- fromJSON(paste0(API, 'entry/pfam'))
@@ -151,12 +142,11 @@ kable(pfam02[['results']][['metadata']]) %>% kable_styling()
 
 :::{.callout-note icon=false}
 ## Ejercicio 2
-Crea una tercera lista con los contenidos de la tercera página de registros
-de Pfam.
+Crea una tercera lista con los contenidos de la tercera página de registros de Pfam.
 :::
 ```{r}
 pfam03 <- fromJSON(pfam02[['next']])
-kable(pfam02[['results']][['metadata']]) %>% kable_styling()
+kable(pfam03[['results']][['metadata']]) %>% kable_styling()
 ```
 # Unión de *páginas* en un mismo *data frame*
 El paquete `jsonlite` nos ofrece la función `rbind_pages()` para juntar una lista
@@ -172,18 +162,12 @@ automatizar el proceso. En el Apéndice 2 encontrarás una solución posible.
 
 # Mostrar todos los detalles de un registro concreto
 
-Ya sabemos cómo mostrar el número de registros de un tipo y cómo descargar la
-lista de todos ellos (de 20 en 20). El siguiente paso es descargar toda la
-información relativa a un registro concreto, del cual debemos saber su identificador.
-Por ejemplo, el dominio PF06235 de Pfam. Para ello, añadimos un tercer campo
-a la URL, después del tipo de datos y del nombre de la base de datos de procedencia:
-el identificador del registro que queremos descargar:
+Ya sabemos cómo mostrar el número de registros de un tipo y cómo descargar la lista de todos ellos (de 20 en 20). El siguiente paso es descargar toda la información relativa a un registro concreto, del cual debemos saber su identificador.
+Por ejemplo, el dominio PF06235 de Pfam. Para ello, añadimos un tercer campo a la URL, después del tipo de datos y del nombre de la base de datos de procedencia:el identificador del registro que queremos descargar:
 
 https://www.ebi.ac.uk/interpro/api/entry/pfam/PF06235
 
-La función genérica `str()` de R nos describe la estructura de cualquier
-objeto en R, y nos puede ayudar a entender cómo podemos acceder a cada dato
-del registro:
+La función genérica `str()` de R nos describe la estructura de cualquier objeto en R, y nos puede ayudar a entender cómo podemos acceder a cada dato del registro:
 
 ```{r}
 pf06235 <- fromJSON(paste0(API, 'entry/pfam/PF06235'))
@@ -194,23 +178,17 @@ nombre_largo
 
 :::{.callout-note icon=false}
 ## Ejercicio 3
-Usa la función `fromJSON()` para guardar la información del registro P01923 
-(proteína de Swiss-Prot) y explora la estructura de los datos con la función
+Usa la función `fromJSON()` para guardar la información del registro P01923  (proteína de Swiss-Prot) y explora la estructura de los datos con la función
 `str()`. ¿Puedes extraer la secuencia?
 :::
 ```{r}
 P01923 <- fromJSON(paste0(API, 'protein/reviewed/P01923'))
 str(P01923)
 sequence <- P01923[['metadata']][['sequence']]
+sequence
 ```
 # Filtros. Cruzar dos tipos de datos
-Hasta ahora hemos construido una URL con hasta tres elementos: el tipo de datos,
-la base de datos de procedencia, y el identificador concreto. Estos tres
-elementos constituyen el *bloque de punto final* de la URL. También hemos visto
-que InterPro devuelve una estructura de datos diferente en función de cuantos
-de esos tres elementos usamos (sólo el tipo de datos es obligatorio): un
-recuento de registros, una lista de registros, o toda la información de un
-registro concreto.
+Hasta ahora hemos construido una URL con hasta tres elementos: el tipo de datos, la base de datos de procedencia, y el identificador concreto. Estos tres elementos constituyen el *bloque de punto final* de la URL. También hemos visto que InterPro devuelve una estructura de datos diferente en función de cuantos de esos tres elementos usamos (sólo el tipo de datos es obligatorio): un recuento de registros, una lista de registros, o toda la información de un registro concreto.
 
 Si al *bloque de punto final* añadimos un segundo tipo de datos, obtendremos
 un recuento o una lista del primer tipo de datos con información sobre el
@@ -224,8 +202,7 @@ dominio o elemento funcional en InterPro.
 
 :::{.callout-note icon=false}
 ## Ejercicio 4
-Determina cuántos taxones de UniProtKB no tienen ninguna proteína asignada.
-¿Y qué proporción de proteínas cuentan con una estructura terciaria?
+Determina cuántos taxones de UniProtKB no tienen ninguna proteína asignada. ¿Y qué proporción de proteínas cuentan con una estructura terciaria?
 :::
 ```{r}
 taxaTot <- fromJSON(paste0(API, 'taxonomy'))[['taxa']][['uniprot']]
@@ -234,19 +211,15 @@ taxaSin<- taxaTot - taxaCon
 
 totProt <- fromJSON(paste0(API, 'protein'))[['proteins']][['uniprot']]
 conStr  <- fromJSON(paste0(API, 'protein/structure'))[['proteins']][['uniprot']]
-sinStr <- totProt - conStr
+prop <- conStr / totProt
 ```
 
 # Filtros. Subconjunto de registros
-Podemos especificar un registro concreto de un tipo de datos para limitar una
-lista de registros de otro tipo de datos. Por ejemplo, la lista de proteínas
-de la base de datos *reviewed* (Swiss-Prot) anotadas con la familia Pfam
-PF00019 (*Transforming grow factor beta like domain*):
+Podemos especificar un registro concreto de un tipo de datos para limitar una lista de registros de otro tipo de datos. Por ejemplo, la lista de proteínas de la base de datos *reviewed* (Swiss-Prot) anotadas con la familia Pfam PF00019 (*Transforming grow factor beta like domain*):
 
 https://www.ebi.ac.uk/interpro/api/protein/reviewed/entry/pfam/PF00019
 
-Para extraer la información desde R, tenemos que familiarizarnos con la estructura
-de los datos.
+Para extraer la información desde R, tenemos que familiarizarnos con la estructura de los datos.
 
 ```{r}
 pfam00019 <- fromJSON(paste0(API, 'protein/reviewed/entry/pfam/PF00019'))
@@ -261,8 +234,7 @@ kable(flatten(pfam00019[['results']][['metadata']])) %>%
 
 :::{.callout-note icon=false}
 ## Ejercicio 5
-Intenta obtener una lista de los dominios de Pfam presentes en vertebrados
-(taxon 7742). Al menos, los 20 primeros.
+Intenta obtener una lista de los dominios de Pfam presentes en vertebrados (taxon 7742). Al menos, los 20 primeros.
 ```{r}
 pfam01 <- fromJSON(paste0(API, 'entry/pfam/taxonomy/uniprot/7742'))
 class(pfam01)
@@ -279,9 +251,10 @@ pfam01[['results']][['metadata']]
 *zinc finger, C2HC type* (Pfam PF01530)?
 :::
 ```{r}
-pfam01 <- fromJSON(paste0(API, 'entry/pfam/taxonomy/uniprot/8493/'))
-coco  <- fromJSON(paste0(API, 'protein/structure'))[['proteins']][['uniprot']]
-sinStr <- totProt - conStr
+coco <- fromJSON(paste0(API,
+  'protein/taxonomy/uniprot/8493/entry/pfam/PF01530'))
+
+coco[['count']]
 ```
 # Apéndice. Cómo juntar todas las páginas que genera la API de Interpro
 A continuación utilizo un **bucle** para crear una lista de marcos de datos que
