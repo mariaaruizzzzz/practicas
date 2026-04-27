@@ -1,0 +1,70 @@
+---
+title: "Práctica 8. BLAST María Ruiz Ventura"
+format: html
+editor: visual
+---
+
+```{bash}
+if [ ! -e ../../data/Buchnera.paa ]; then
+   # Creamos un archivo para enmascarar zonas de baja complejidad:
+   if [ ! -e buchnera_seg.asnb ]; then
+      segmasker -in ../../data/Buchnera.fa \
+                -infmt fasta \
+                -parse_seqids \
+                -outfmt maskinfo_asn1_bin \
+                -out ../../data/Buchnera_seg.asnb
+   fi
+   # Y indexamos el archivo FASTA para BLAST:
+   makeblastdb  -in ../../data/Buchnera.fa \
+                -input_type fasta \
+                -dbtype prot \
+                -parse_seqids \
+                -mask_data ../../data/buchnera_seg.asnb \
+                -out ../../data/Buchnera \
+                -title "Proteoma de Buchnera"
+fi
+# Hay que repetir todo esto para Blochmannia.
+```
+
+```{bash}
+if [ ! -e ../../data/Blochmannia.paa ]; then
+   # Creamos un archivo para enmascarar zonas de baja complejidad:
+   if [ ! -e blochmannia_seg.asnb ]; then
+      segmasker -in ../../data/Blochmannia.fa \
+                -infmt fasta \
+                -parse_seqids \
+                -outfmt maskinfo_asn1_bin \
+                -out ../../data/blochmannia_seg.asnb
+   fi
+   # Y indexamos el archivo FASTA para BLAST:
+   makeblastdb  -in ../../data/Blochmannia.fa \
+                -input_type fasta \
+                -dbtype prot \
+                -parse_seqids \
+                -mask_data ../../data/blochmannia_seg.asnb \
+                -out ../../data/Blochmannia \
+                -title "Proteoma de blochmannia"
+fi
+```
+
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
