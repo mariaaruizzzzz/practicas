@@ -6,7 +6,7 @@ execute:
   eval: true
   error: true
 engine: knitr
-bibliography: ../../references.bib
+bibliography: ../../doc/references.bib
 language:
    title-block-published: "Última actualización:"
    section-title-references: "Bibliografía"
@@ -52,7 +52,7 @@ el paquete `ggplot2`, que usaremos después.
 
 ```{r}
 library('ggplot2')
-gwas <- read.table('gwas.txt', header = TRUE)
+gwas <- read.table('../../data/gwas.txt', header = TRUE)
 gwas <- gwas[! is.na(gwas$P),]
 ```
 
@@ -322,7 +322,3 @@ ggplot(data = gwas, mapping = aes(x = GlobalPosition, y = -log(P), color = color
 ```{r}
 sessionInfo()
 ```
-
-
-
-
