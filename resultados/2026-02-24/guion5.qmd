@@ -6,7 +6,7 @@ execute:
   output: true
   error: true
 engine: knitr
-bibliography: ../../references.bib
+bibliography: ../../doc/references.bib
 language:
    title-block-published: "Última actualización:"
    section-title-references: "Bibliografía"
@@ -124,17 +124,20 @@ library('curl')
 :::{.callout-note icon=false}
 ## Ejercicio 1
 
-Intenta ejecutar los bloques siguientes. Compáralos y explica qué problemas o
-dificultades identificas en cada uno.
+Intenta ejecutar los bloques siguientes. Compáralos y explica qué problemas o dificultades identificas en cada uno.
 
 ¿Por qué el segundo comando funciona?
+
 Al envolver la URL con URLEncode(), el código transforma esos caracteres problemáticos en un formato compatible (llamado Percent-encoding).
-Un espacio se convierte en %20.
-Una comilla " se convierte en %22.
+
+- Un espacio se convierte en %20.
+- Una comilla " se convierte en %22.
+
 Esto asegura que la función curl_download entregue una dirección válida al servidor de ENA (European Nucleotide Archive).
 
 ¿Por qué el primero  falla?
-En la segunda imagen, estás pasando la URL directamente como un texto plano. Como contiene espacios y comillas, la función curl_download se confunde o el servidor web rechaza la petición porque la sintaxis de la dirección es inválida. El error que ves (la línea roja en RStudio) es el lenguaje diciendo: "No entiendo esta dirección, tiene caracteres que no deberían estar ahí
+
+En el primer comando, se está pasando la URL directamente como un texto plano. Como contiene espacios y comillas, la función curl_download se confunde o el servidor web rechaza la petición porque la sintaxis de la dirección es inválida. El error que ves (la línea roja en RStudio) es el lenguaje diciendo: "No entiendo esta dirección, tiene caracteres que no deberían estar ahí". 
 
 
 
@@ -161,25 +164,49 @@ curl_download(URLencode(URL), destfile = 'z2.txt')
 
 :::
 
-:::{.callout-note icon=false}
+::: {.callout-note icon=false}
 ## Ejercicio 2
-Confecciona una URL para descargar una tabla de las secuencias codificantes de
-alcohol deshidrogenasas del género *Drosophila*, que te permita contestar las
-preguntas siguientes. Consulta el apéndice de este guión, si lo necesitas.
+Confecciona una URL para descargar una tabla de las secuencias codificantes de alcohol deshidrogenasas del género *Drosophila*, que te permita contestar las preguntas siguientes. Consulta el apéndice de este guión, si lo necesitas.
 
-1. ¿Cuántas secuencias hay con el término "alcohol dehydrogenase" en su descripción?
-2. ¿Qué longitudes tienen? 
-3. ¿De cuántas especies diferentes son estas secuencias?
-4. ¿Cuándo se publicaron las más recientes?
-:::
 ```{r}
+# 1. Definimos la consulta específica para Drosophila
 result <- 'result=coding&'
 query  <- 'query=tax_tree(7215) AND description="alcohol dehydrogenase"&'
-fields <- 'fields=tax_id,scientific_name,last_updated,base_count,first_public&'
+fields <- 'fields=accession,tax_id,scientific_name,last_updated,base_count,first_public&'
 limit  <- 'limit=0'
-URL <- paste0(portal, result, query, fields, limit)
-curl_download(URLencode(URL), destfile = 'z2.txt')
+
+# Ahora sí funcionará sin dar error
+URL_droso <- paste0(portal, result, query, fields, limit)
+
+# 2. Descargamos el archivo
+curl_download(URLencode(URL_droso), destfile = 'drosophila.txt')
+
+# 3. Leemos la tabla 
+drosophila <- read.table('drosophila.txt', header = TRUE, sep = '\t', quote = "")
+
+# --- RESPUESTAS ---
+
+# 1. ¿Cuántas secuencias hay?
+nrow(drosophila)
+
+# 2. ¿Qué longitudes tienen?
+summary(drosophila$base_count)
+
+# 3. ¿De cuántas especies diferentes son?
+length(unique(drosophila$scientific_name))
+
+# 4. ¿Cuándo se publicaron las más recientes?
+fechas <- as.Date(drosophila$first_public)
+
+if(all(is.na(fechas))) {
+  print("No hay fechas de publicación registradas para estas secuencias en ENA.")
+} else {
+  max(fechas, na.rm = TRUE)
+}
 ```
+Tras ejecutar la consulta en ENA, obtenemos un total de 6 secuencias correspondientes a 1 única especie de Drosophila. La longitud media de estas secuencias es de 875 pares de bases (oscilando entre 771 y 1395 pb). En cuanto a su publicación, hemos comprobado que la base de datos no tiene registrada la fecha de publicación (first_public) para ninguna de estas 6 secuencias específicas."
+:::
+
 # Trabajar con los resultados
 La función `read.table()` de R nos permite leer un archivo (o una URL) para crear
 una tabla. Necesita que todas las filas tengan el mismo número de campos o columnas,
@@ -188,22 +215,16 @@ nos permite también especificar el tipo de datos de cada columna. Podemos usar
 como ejemplo los genomas de platelmintos del ejercicio 1:
 
 ```{r}
-# Si no has ejecutado el tercer bloque del ejercicio 1,
-# la variable URL no estará definida.
-platelmintos <- read.table(URLencode(URL),
+# Leemos directamente el archivo z1.txt que descargamos en el Ejercicio 1
+platelmintos <- read.table('z1.txt',
     header = TRUE,
     colClasses = c('numeric', 'factor', 'character', 'Date', 'numeric', 'character'),
     sep = '\t',
     na.strings = '')
 ```
 
-El código siguiente crea una nueva columna en la tabla con el género al que
-pertenece cada secuencia. Se toma como género la primera palabra del nombre
-científico. Para ello, debemos separar las partes de cada nombre delimitadas por
-un espacio en blanco, con la función `strsplit()`. Y por último usamos la función
-`sapply()` para aplicar a cada nombre científico la función de selección
-de componentes, `[`, y la opción "1", para seleccionar sólo el primero de los
-componentes en que habíamos dividido cada nombre científico.
+El código siguiente crea una nueva columna en la tabla con el género al que pertenece cada secuencia. Se toma como género la primera palabra del nombre científico. Para ello, debemos separar las partes de cada nombre delimitadas por un espacio en blanco, con la función `strsplit()`. Y por último usamos la función
+`sapply()` para aplicar a cada nombre científico la función de selección de componentes, `[`, y la opción "1", para seleccionar sólo el primero de los componentes en que habíamos dividido cada nombre científico.
 
 ```{r SepararGenero}
 platelmintos$genus <- sapply(
@@ -212,8 +233,7 @@ platelmintos$genus <- sapply(
    1)
 ```
 
-Una vez clasificadas por género, podemos visualizar el número de bases de cada
-secuencia agrupadas por género.
+Una vez clasificadas por género, podemos visualizar el número de bases de cada secuencia agrupadas por género.
 
 ```{r}
 #| fig.width: 10
@@ -226,9 +246,22 @@ mtext('Base count', side = 2, line = 5)
 
 :::{.callout-note icon=false}
 ## Ejercicio 3
-¿De qué manera necesitarías transformar la tabla `platelmintos` para poder
-representar gráficamente la longitud acumulada de todas las secuencias
-disponibles a medida que se han ido publicando?
+¿De qué manera necesitarías transformar la tabla `platelmintos` para poder representar gráficamente la longitud acumulada de todas las secuencias disponibles a medida que se han ido publicando?
+
+```{r}
+# Ordenamos la tabla por fecha (de más antigua a más reciente)
+platelmintos_ord <- platelmintos[order(platelmintos$last_updated), ]
+
+# Calculamos la suma acumulada de la columna base_count
+platelmintos_ord$bases_acumuladas <- cumsum(platelmintos_ord$base_count)
+
+# Dibujamos el gráfico de líneas
+plot(as.Date(platelmintos_ord$last_updated), platelmintos_ord$bases_acumuladas,
+     type = "l", col = "blue", lwd = 2,
+     xlab = "Fecha de publicación", 
+     ylab = "Longitud acumulada (pb)",
+     main = "Crecimiento histórico de secuencias de Platelmintos")
+```
 :::
 
 # La API del navegador (*browser*) de ENA
@@ -251,6 +284,17 @@ curl_download(URL, destfile = 'Adh.fasta')
 :::{.callout-note icon=false}
 ## Ejercicio 4
 Intenta descargar esas mismas secuencias en formato EMBL.
+
+```{r}
+portal_browser <- 'https://www.ebi.ac.uk/ena/browser/api/'
+formato_embl   <- 'embl/'
+accession      <- 'AAC39011,AAY25307,ABU44510,ABG56046,AAO06902'
+
+URL_embl <- paste0(portal_browser, formato_embl, accession)
+
+# Descargamos el archivo en formato EMBL
+curl_download(URL_embl, destfile = 'Adh.embl')
+```
 :::
 
 # Apéndice
