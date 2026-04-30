@@ -12,3 +12,5 @@ Nota: Los archivos de datos grandes se encuentran en la carpeta `data/` y están
 
 Licencia
 Este trabajo deriva de los guiones de prácticas de la asignatura y, por tanto, se distribuye bajo la misma licencia: Creative Commons Attribution Share Alike 4.0 International (CC BY-SA 4.0)
+
+Visto
