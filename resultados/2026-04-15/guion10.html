@@ -2209,17 +2209,18 @@ vertical-align: -.125em;
    
   <ul>
   <li><a href="#objetivo" id="toc-objetivo" class="nav-link active" data-scroll-target="#objetivo">Objetivo</a></li>
+  <li><a href="#preparación" id="toc-preparación" class="nav-link" data-scroll-target="#preparación">Preparación</a></li>
+  <li><a href="#hifiasm" id="toc-hifiasm" class="nav-link" data-scroll-target="#hifiasm">Hifiasm</a>
+  <ul class="collapse">
   <li><a href="#instalación-de-hifiasm" id="toc-instalación-de-hifiasm" class="nav-link" data-scroll-target="#instalación-de-hifiasm">Instalación de hifiasm</a></li>
   <li><a href="#datos" id="toc-datos" class="nav-link" data-scroll-target="#datos">Datos</a></li>
   <li><a href="#revisión-de-los-datos" id="toc-revisión-de-los-datos" class="nav-link" data-scroll-target="#revisión-de-los-datos">Revisión de los datos</a></li>
   <li><a href="#ensamblaje" id="toc-ensamblaje" class="nav-link" data-scroll-target="#ensamblaje">Ensamblaje</a></li>
-  <li><a href="#con-la-ejecución-condicional-nos-ahorramos-algún-mensaje-de-error" id="toc-con-la-ejecución-condicional-nos-ahorramos-algún-mensaje-de-error" class="nav-link" data-scroll-target="#con-la-ejecución-condicional-nos-ahorramos-algún-mensaje-de-error">Con la ejecución condicional nos ahorramos algún mensaje de error:</a>
-  <ul class="collapse">
   <li><a href="#evaluación-del-resultado" id="toc-evaluación-del-resultado" class="nav-link" data-scroll-target="#evaluación-del-resultado">Evaluación del resultado</a></li>
   <li><a href="#calidad-del-ensamblaje" id="toc-calidad-del-ensamblaje" class="nav-link" data-scroll-target="#calidad-del-ensamblaje">Calidad del ensamblaje</a></li>
   <li><a href="#visualización-del-grafo" id="toc-visualización-del-grafo" class="nav-link" data-scroll-target="#visualización-del-grafo">Visualización del grafo</a></li>
   </ul></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#bibliografía" id="toc-bibliografía" class="nav-link" data-scroll-target="#bibliografía">Bibliografía</a></li>
   </ul>
 </nav>
 </div>
@@ -2244,7 +2245,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Fecha de publicación</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">28 de abril de 2026</p>
+      <p class="date">15 de mayo de 2026</p>
     </div>
   </div>
   
@@ -2259,34 +2260,52 @@ vertical-align: -.125em;
 <section id="objetivo" class="level2">
 <h2 class="anchored" data-anchor-id="objetivo">Objetivo</h2>
 <p>Ensamblar el genoma de un eucariota diploide con lecturas de PacBio de alta fidelidad.</p>
-<p>##Preparación</p>
-<p>#Hifiasm</p>
-<p>El programa hifiasm no está instalado en los ordenadores virtuales, y por tanto es necesario hacerlo manualmente, siguiendo los pasos siguientes en el terminal de Bash. Lo recomendable es instalarlo en una carpeta bin dentro de la carpeta de usuaria.</p>
 </section>
+<section id="preparación" class="level2">
+<h2 class="anchored" data-anchor-id="preparación">Preparación</h2>
+</section>
+<section id="hifiasm" class="level1">
+<h1>Hifiasm</h1>
+<p>El programa hifiasm no está instalado en los ordenadores virtuales, y por tanto es necesario hacerlo manualmente, siguiendo los pasos siguientes en el terminal de Bash. Lo recomendable es instalarlo en una carpeta bin dentro de la carpeta de usuaria.</p>
 <section id="instalación-de-hifiasm" class="level2">
 <h2 class="anchored" data-anchor-id="instalación-de-hifiasm">Instalación de hifiasm</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear carpeta bin si no existe y entrar en ella</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear carpeta bin si no existe</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-d</span> ~/bin <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span> <span class="fu">mkdir</span> ~/bin<span class="kw">;</span> <span class="cf">fi</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/bin</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar el código fuente y compilarlo</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="pp">[</span><span class="ss">https://github.com/chhylp123/hifiasm</span><span class="pp">]</span><span class="er">(</span><span class="ex">https://github.com/chhylp123/hifiasm</span><span class="kw">)</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> hifiasm</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Añadir el programa al PATH permanentemente para que el ordenador lo encuentre</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&#39;export PATH=$PATH:~/bin/hifiasm&#39;</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span> ~/.bashrc</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Solo clonamos si la carpeta no existe</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-d</span> <span class="st">&quot;hifiasm&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;Descargando hifiasm...&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">git</span> clone https://github.com/chhylp123/hifiasm</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">cd</span> hifiasm</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">make</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;hifiasm ya está presente en ~/bin/hifiasm&quot;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Añadimos al PATH para esta sesión</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$PATH</span><span class="st">:</span><span class="va">$HOME</span><span class="st">/bin/hifiasm&quot;</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>hifiasm ya está presente en ~/bin/hifiasm</code></pre>
+</div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/bin</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar el paquete comprimido</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="pp">[</span><span class="ss">https://github.com/huangnengCSU/compleasm/releases/download/v0.2.7/compleasm</span><span class="pp">-</span><span class="ss">0.2.7_x64</span><span class="pp">-</span><span class="ss">linux.tar.bz2</span><span class="pp">]</span><span class="er">(</span><span class="ex">https://github.com/huangnengCSU/compleasm/releases/download/v0.2.7/compleasm-0.2.7_x64-linux.tar.bz2</span><span class="kw">)</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Descomprimir y renombrar la carpeta</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-jxvf</span> compleasm-0.2.7_x64-linux.tar.bz2</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> compleasm-0.2.7_x64-linux compleasm_kit</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/bin</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Comprobamos si la carpeta final ya existe</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-d</span> <span class="st">&quot;compleasm_kit&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;Descargando compleasm...&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">wget</span> https://github.com/huangnengCSU/compleasm/releases/download/v0.2.7/compleasm-0.2.7_x64-linux.tar.bz2</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># El archivo de esta versión ya se descompone como compleasm_kit</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tar</span> <span class="at">-jxvf</span> compleasm-0.2.7_x64-linux.tar.bz2</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rm</span> compleasm-0.2.7_x64-linux.tar.bz2</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;compleasm ya está listo en ~/bin/compleasm_kit&quot;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>compleasm ya está listo en ~/bin/compleasm_kit</code></pre>
+</div>
 </div>
 </section>
 <section id="datos" class="level2">
@@ -2308,8 +2327,8 @@ vertical-align: -.125em;
 </div>
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos el número de lecturas, la longitud mínima, máxima y media, así como el total de bases.</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ../../data/At4.10.fa.gz <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;BEGIN{min=1e9; max=0; total=0; n=0} /^&gt;/{if(seqlen&gt;0){n++; total+=seqlen; if(seqlen&lt;min)min=seqlen; if(seqlen&lt;max)max=seqlen}; seqlen=0; next} {seqlen+=length($0)} END{if(seqlen&gt;0){n++; total+=seqlen; if(seqlen&lt;min)min=seqlen; if(seqlen&lt;max)max=seqlen}; print &quot;Lecturas totales: &quot; n &quot;\nLongitud Mínima: &quot; min &quot;\nLongitud Máxima: &quot; max &quot;\nLongitud Media: &quot; total/n &quot;\nBases totales: &quot; total}&#39;</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos el número de lecturas, la longitud mínima, máxima y media, así como el total de bases.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> ../../data/At4.10.fa.gz <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;BEGIN{min=1e9; max=0; total=0; n=0} /^&gt;/{if(seqlen&gt;0){n++; total+=seqlen; if(seqlen&lt;min)min=seqlen; if(seqlen&lt;max)max=seqlen}; seqlen=0; next} {seqlen+=length($0)} END{if(seqlen&gt;0){n++; total+=seqlen; if(seqlen&lt;min)min=seqlen; if(seqlen&lt;max)max=seqlen}; print &quot;Lecturas totales: &quot; n &quot;\nLongitud Mínima: &quot; min &quot;\nLongitud Máxima: &quot; max &quot;\nLongitud Media: &quot; total/n &quot;\nBases totales: &quot; total}&#39;</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Lecturas totales: 13812
 Longitud Mínima: 2942
@@ -2320,7 +2339,8 @@ Bases totales: 250599484</code></pre>
 </div>
 <section id="cálculo-de-la-cobertura" class="level1">
 <h1>Cálculo de la cobertura:</h1>
-<p>Si el genoma de Arabidopsis mide aproximadamente 135 Mb (aunque el cromosoma 4 son unos 19 Mb), y las bases totales obtenidas arriba son (ejemplo) 760,000,000 bp, dividimos: Cobertura=Bases totales/Tamaño del genoma=760.000.000/19.000.000=40X.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Si</span> el genoma de Arabidopsis mide aproximadamente 135 Mb <span class="er">(</span><span class="ex">aunque</span> el cromosoma 4 son unos 19 Mb<span class="kw">)</span><span class="ex">,</span> y las bases totales obtenidas arriba son <span class="er">(</span><span class="ex">ejemplo</span><span class="kw">)</span> <span class="ex">760,000,000</span> bp, dividimos:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="va">Cobertura</span><span class="op">=</span>Bases <span class="ex">totales/Tamaño</span> del genoma=760.000.000/19.000.000=40X.</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </div>
 </div>
@@ -2328,18 +2348,16 @@ Bases totales: 250599484</code></pre>
 <section id="ensamblaje" class="level2">
 <h2 class="anchored" data-anchor-id="ensamblaje">Ensamblaje</h2>
 <p>El programa hifiasm produce varios archivos de salida. Para tener la carpeta de trabajo ordenada, es recomendable crear un subcarpeta donde poder guardarlos. Si fuéramos a probar más de una estrategia de ensamblado, guardaríamos los resultados de cada intento en una carpeta diferente, que podríamos nombrar asm1, asm2, etc. Aunque sólo realicemos un ensamblaje, crearemos la carpeta asm1 para guardar los resultados en ella.</p>
-</section>
-<section id="con-la-ejecución-condicional-nos-ahorramos-algún-mensaje-de-error" class="level1">
-<h1>Con la ejecución condicional nos ahorramos algún mensaje de error:</h1>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-d</span> asm1 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span> <span class="fu">mkdir</span> asm1<span class="kw">;</span> <span class="cf">fi</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Con la ejecución condicional nos ahorramos algún mensaje de error:</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-d</span> asm1 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span> <span class="fu">mkdir</span> asm1<span class="kw">;</span> <span class="cf">fi</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>El ensamblaje de estas lecturas puede durar unos minutos. No queremos tener que ejecutarlo cada vez que compilamos el documento de Quarto. Tenemos dos opciones: o bien usamos la directriz #| cache: true al principio del bloque de código o bien controlamos directamente la ejecución condicional con Bash. Si usamos el método que ofrece Quarto, aparecerá una nueva carpeta que guarda resultados previos y que estaría bien incluir en el repositorio de Git. Yo prefiero usar Bash:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$PATH</span><span class="st">:</span><span class="va">$HOME</span><span class="st">/bin/hifiasm&quot;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-e</span> asm1/At4.bp.p_ctg.gfa <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">hifiasm</span> <span class="at">-o</span> asm1/At4 <span class="at">-t</span> 2 <span class="at">-f</span> 0 ../../data/At4.10.fa.gz <span class="dv">2</span><span class="op">&gt;</span> asm1/hifiasm.log</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$PATH</span><span class="st">:</span><span class="va">$HOME</span><span class="st">/bin/hifiasm&quot;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-e</span> asm1/At4.bp.p_ctg.gfa <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">hifiasm</span> <span class="at">-o</span> asm1/At4 <span class="at">-t</span> 2 <span class="at">-f</span> 0 ../../data/At4.10.fa.gz <span class="dv">2</span><span class="op">&gt;</span> asm1/hifiasm.log</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Las opciones significan lo siguiente:</p>
 <pre><code>-o asm1/At4: usa el prefijo asm1/At4 para los archivos de salida.
@@ -2357,11 +2375,16 @@ Bases totales: 250599484</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Haploide vs Diploide: Los resultados corresponden a un genoma diploide. Hifiasm separa por defecto los dos alelos (haplotipos).</p>
-<p>Purga de duplicaciones: Se ha aplicado el nivel de purga por defecto (Nivel 3), que elimina duplicaciones causadas por la heterocigosidad.</p>
-<p>Lecturas ultra-largas: Si tuviéramos datos de Oxford Nanopore (UL), usaríamos el parámetro –ul.</p>
+<p>Consulta la ayuda de hifiasm (hifiasm -h) y contesta las preguntas siguientes:</p>
+<p>¿Los parámetros corresponden al ensamblaje de un genoma haploide o diploide?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Haploide</span> vs Diploide: Los resultados corresponden a un genoma diploide. Hifiasm separa por defecto los dos alelos <span class="er">(</span><span class="ex">haplotipos</span><span class="kw">)</span><span class="bu">.</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>¿Qué nivel de eliminación de duplicaciones hemos aplicado? (El paso de eliminar duplicaciones sirve para que las zonas de alta heterocigosidad no sean ensambladas como contigs diferentes).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Purga</span> de duplicaciones: Se ha aplicado el nivel de purga por defecto <span class="er">(</span><span class="ex">Nivel</span> 3<span class="kw">)</span><span class="ex">,</span> que elimina duplicaciones causadas por la heterocigosidad.</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Si tuvieramos lecturas ultra-largas, ¿con qué opción o argumento añadiríamos esa información?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Lecturas</span> ultra-largas: Si tuviéramos datos de Oxford Nanopore <span class="er">(</span><span class="ex">UL</span><span class="kw">)</span><span class="ex">,</span> usaríamos el parámetro <span class="at">--ul.</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
+</section>
 <section id="evaluación-del-resultado" class="level2">
 <h2 class="anchored" data-anchor-id="evaluación-del-resultado">Evaluación del resultado</h2>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
@@ -2374,45 +2397,54 @@ Bases totales: 250599484</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Secuencias: Se guardan en formato GFA (Graphical Fragment Assembly). El archivo principal es At4.bp.p_ctg.gfa.</p>
-<p>Líneas ‘A’: Indican alineamientos o conexiones de lecturas que justifican la unión de dos fragmentos.</p>
-<p>Archivos .bed: Contienen regiones de las lecturas que han sido filtradas o marcadas como repetitivas.</p>
-<p>Cobertura: Hifiasm estima la cobertura de regiones homocigotas y heterocigotas comparando la abundancia de k-meros (esto se ve en el archivo hifiasm.log).</p>
+<p>Consulta la descripción de los archivos de salida que encontrarás en este enlace y contesta las preguntas siguientes:</p>
+<p>¿Dónde están las secuencias que componen el ensamblaje?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Secuencias:</span> Se guardan en formato GFA <span class="er">(</span><span class="ex">Graphical</span> Fragment Assembly<span class="kw">)</span><span class="bu">.</span> El archivo principal es At4.bp.p_ctg.gfa.</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>En los archivos .gfa, ¿qué son las líneas que empiezan por ‘A’?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Líneas</span> <span class="st">&#39;A&#39;</span>: Indican alineamientos o conexiones de lecturas que justifican la unión de dos fragmentos.</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>¿Qué información tiene los archivos .bed?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Archivos</span> .bed: Contienen regiones de las lecturas que han sido filtradas o marcadas como repetitivas.</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>¿Cuál es la cobertura media estimada de las secuencias homocigotas? ¿Y la de las heterocigotas?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Cobertura:</span> Hifiasm estima la cobertura de regiones homocigotas y heterocigotas comparando la abundancia de k-meros <span class="er">(</span><span class="ex">esto</span> se ve en el archivo hifiasm.log<span class="kw">)</span><span class="bu">.</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <p>Los ensamblajes primario y por haplotipos se presentan en formato GFA. Para extraer las secuencias en formato FASTA podemos usar el pequeño script siguiente, en lenguaje AWK, desde el terminal de Bash:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="st">&#39;(/^S/){print &quot;&gt;&quot; $2 &quot;\n&quot; $3}&#39;</span> asm1/At4.bp.p_ctg.gfa <span class="op">&gt;</span> asm1/At4.fa</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span> <span class="st">&#39;(/^S/){print &quot;&gt;&quot; $2 &quot;\n&quot; $3}&#39;</span> asm1/At4.bp.p_ctg.gfa <span class="op">&gt;</span> asm1/At4.fa</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="calidad-del-ensamblaje" class="level2">
 <h2 class="anchored" data-anchor-id="calidad-del-ensamblaje">Calidad del ensamblaje</h2>
 <p>Para obtener las estadísticas del ensamblaje utilizaremos el programa compleasm (Huang and Li 2023), que no está instalado en el ordenador virtual. Está programado en Python y depende del módulo pandas de Python. En WSL, este módulo o paquete probablemente pueda instalarse con apt install python3-pandas. Alternativamente, en los sistemas con conda podéis hacer conda install pandas. En el ordenador virtual, el módulo pandas ya está disponible.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-e</span> asm1_eval/summary.txt <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>   <span class="ex">python3</span> ~/bin/compleasm_kit/compleasm.py run <span class="dt">\</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">-t</span> 2 <span class="at">-l</span> brassicales <span class="at">-a</span> asm1/At4.fa <span class="at">-o</span> asm1_eval</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Traceback (most recent call last):
-  File &quot;/home/VMAULES/ruizven2/bin/compleasm_kit/compleasm.py&quot;, line 23, in &lt;module&gt;
-    import pandas as pd
-ModuleNotFoundError: No module named &#39;pandas&#39;</code></pre>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejecutamos el análisis solo si no existe el archivo de resumen</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-e</span> asm1_eval/summary.txt <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">python3</span> ~/bin/compleasm_kit/compleasm.py run <span class="dt">\</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">-t</span> 2 <span class="dt">\</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">-l</span> brassicales <span class="dt">\</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">-a</span> asm1/At4.fa <span class="dt">\</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">-o</span> asm1_eval</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>En adelante supondré que compleasm.py está en ~/bin/compleasm_kit. El programa necesita descargar la lista de genes típica del linaje al que pertenece el ensamblaje. En nuestro caso, el linaje es el de las Brassicales. La orden siguiente puede tomar más de 10 minutos.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">!</span> <span class="ot">-e</span> asm1_eval/summary.txt <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>   <span class="ex">python3</span> ~/bin/compleasm_kit/compleasm.py run <span class="dt">\</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">-t</span> 2 <span class="at">-l</span> brassicales <span class="at">-a</span> asm1/At4.fa <span class="at">-o</span> asm1_eval</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mostramos el contenido del resumen por pantalla para el informe</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> asm1_eval/summary.txt <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">cat</span> asm1_eval/summary.txt</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>   <span class="bu">echo</span> <span class="st">&quot;Esperando resultados... (Asegúrate de que el bloque anterior terminó con éxito)&quot;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Traceback (most recent call last):
-  File &quot;/home/VMAULES/ruizven2/bin/compleasm_kit/compleasm.py&quot;, line 23, in &lt;module&gt;
-    import pandas as pd
-ModuleNotFoundError: No module named &#39;pandas&#39;</code></pre>
+<pre><code>## lineage: brassicales_odb12
+S:16.17%, 697
+D:0.14%, 6
+F:0.19%, 8
+I:0.00%, 0
+M:83.51%, 3600
+N:4311</code></pre>
 </div>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;El análisis de completitud con compleasm muestra un 16.17% de genes Single-copy y un 83.51% de genes desaparecidos (Missing). Este valor de Missing tan elevado es esperado, ya que no estamos ensamblando el genoma completo de Arabidopsis thaliana, sino una fracción centrada principalmente en el Cromosoma 4. Por tanto, la ausencia de la mayoría de los ortólogos universales de las Brassicales es coherente con los datos de partida.&quot;</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2423,10 +2455,11 @@ ModuleNotFoundError: No module named &#39;pandas&#39;</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>-t 2: Número de núcleos del procesador (threads).</p>
-<p>-l brassicales: Base de datos de genes específicos para plantas del orden Brassicales (Arabidopsis).</p>
-<p>-a: Archivo de entrada (nuestro ensamblaje At4.fa).</p>
-<p>-o: Carpeta de salida para los resultados.</p>
+<p>Consulta la ayuda de compleasm.py y averigua qué significan los argumentos utilizados.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-t</span> 2: Número de núcleos del procesador <span class="er">(</span><span class="ex">threads</span><span class="kw">)</span><span class="bu">.</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ex">-l</span> brassicales: Base de datos de genes específicos para plantas del orden Brassicales <span class="er">(</span><span class="ex">Arabidopsis</span><span class="kw">)</span><span class="bu">.</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="ex">-a:</span> Archivo de entrada <span class="er">(</span><span class="ex">nuestro</span> ensamblaje At4.fa<span class="kw">)</span><span class="bu">.</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="ex">-o:</span> Carpeta de salida para los resultados.</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section>
@@ -2449,8 +2482,8 @@ ModuleNotFoundError: No module named &#39;pandas&#39;</code></pre>
 </div>
 </section>
 </section>
-<section id="references" class="level1">
-<h1>References</h1>
+<section id="bibliografía" class="level1">
+<h1>Bibliografía</h1>
 <p>Huang, Neng, and Heng Li. 2023. “Compleasm: A Faster and More Accurate Reimplementation of BUSCO.” Bioinformatics 39 (10): btad595. https://doi.org/10.1093/bioinformatics/btad595. Melsted, P., and J. K. Pritchard. 2011. “Efficient Counting of k-Mers in DNA Sequences Using a Bloom Filter.” BMC Bioinformatics 12: 333. https://doi.org/10.1186/1471-2105-12-333. Rabanal, Fernando A, Maike Gräff, Christa Lanz, Katrin Fritschi, Victor Llaca, Michelle Lang, Pablo Carbonell-Bejerano, Ian Henderson, and Detlef Weigel. 2022. “Pushing the Limits of HiFi Assemblies Reveals Centromere Diversity Between Two Arabidopsis Thaliana Genomes.” Nucleic Acids Research 50 (21): 12309–27. https://doi.org/10.1093/nar/gkac1115.</p>
 </section>
 

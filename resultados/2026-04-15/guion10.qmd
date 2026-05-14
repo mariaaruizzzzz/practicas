@@ -19,9 +19,9 @@ format:
 
 Ensamblar el genoma de un eucariota diploide con lecturas de PacBio de alta fidelidad.
 
-##Preparación
+## Preparación
 
-#Hifiasm
+# Hifiasm
 
 El programa hifiasm no está instalado en los ordenadores virtuales, y por tanto es necesario hacerlo manualmente, siguiendo los pasos siguientes en el terminal de Bash. Lo recomendable es instalarlo en una carpeta bin dentro de la carpeta de usuaria.
 
@@ -29,33 +29,42 @@ El programa hifiasm no está instalado en los ordenadores virtuales, y por tanto
 
 ```{bash}
 #| label: instalacion-hifiasm
-#| eval: false
+#| eval: true
 
-# Crear carpeta bin si no existe y entrar en ella
+# Crear carpeta bin si no existe
 if [ ! -d ~/bin ]; then mkdir ~/bin; fi
 cd ~/bin
 
-# Descargar el código fuente y compilarlo
-git clone [https://github.com/chhylp123/hifiasm](https://github.com/chhylp123/hifiasm)
-cd hifiasm
-make
+# Solo clonamos si la carpeta no existe
+if [ ! -d "hifiasm" ]; then
+    echo "Descargando hifiasm..."
+    git clone https://github.com/chhylp123/hifiasm
+    cd hifiasm
+    make
+else
+    echo "hifiasm ya está presente en ~/bin/hifiasm"
+fi
 
-# Añadir el programa al PATH permanentemente para que el ordenador lo encuentre
-echo 'export PATH=$PATH:~/bin/hifiasm' >> ~/.bashrc
-. ~/.bashrc
+# Añadimos al PATH para esta sesión
+export PATH="$PATH:$HOME/bin/hifiasm"
 ```
 
 ```{bash}
 #| label: instalacion-compleasm
-#| eval: false
+#| eval: true
 
 cd ~/bin
-# Descargar el paquete comprimido
-wget [https://github.com/huangnengCSU/compleasm/releases/download/v0.2.7/compleasm-0.2.7_x64-linux.tar.bz2](https://github.com/huangnengCSU/compleasm/releases/download/v0.2.7/compleasm-0.2.7_x64-linux.tar.bz2)
 
-# Descomprimir y renombrar la carpeta
-tar -jxvf compleasm-0.2.7_x64-linux.tar.bz2
-mv compleasm-0.2.7_x64-linux compleasm_kit
+# Comprobamos si la carpeta final ya existe
+if [ ! -d "compleasm_kit" ]; then
+    echo "Descargando compleasm..."
+    wget https://github.com/huangnengCSU/compleasm/releases/download/v0.2.7/compleasm-0.2.7_x64-linux.tar.bz2
+    # El archivo de esta versión ya se descompone como compleasm_kit
+    tar -jxvf compleasm-0.2.7_x64-linux.tar.bz2
+    rm compleasm-0.2.7_x64-linux.tar.bz2
+else
+    echo "compleasm ya está listo en ~/bin/compleasm_kit"
+fi
 ```
 
 ## Datos
@@ -77,16 +86,18 @@ zcat ../../data/At4.10.fa.gz | awk 'BEGIN{min=1e9; max=0; total=0; n=0} /^>/{if(
 ```
 
 # Cálculo de la cobertura:
+```bash
 Si el genoma de Arabidopsis mide aproximadamente 135 Mb (aunque el cromosoma 4 son unos 19 Mb), y las bases totales obtenidas arriba son (ejemplo) 760,000,000 bp, dividimos:
 Cobertura=Bases totales/Tamaño del genoma=760.000.000/19.000.000=40X.
+```
 :::
 
 ## Ensamblaje
 
 El programa hifiasm produce varios archivos de salida. Para tener la carpeta de trabajo ordenada, es recomendable crear un subcarpeta donde poder guardarlos. Si fuéramos a probar más de una estrategia de ensamblado, guardaríamos los resultados de cada intento en una carpeta diferente, que podríamos nombrar asm1, asm2, etc. Aunque sólo realicemos un ensamblaje, crearemos la carpeta asm1 para guardar los resultados en ella.
 
-# Con la ejecución condicional nos ahorramos algún mensaje de error:
 ```{bash}
+# Con la ejecución condicional nos ahorramos algún mensaje de error:
 if [ ! -d asm1 ]; then mkdir asm1; fi
 ```
 
@@ -109,23 +120,46 @@ Las opciones significan lo siguiente:
 
 :::{.callout-note icon=false}
 # Ejercicio 2
+Consulta la ayuda de hifiasm (hifiasm -h) y contesta las preguntas siguientes:
+
+
+¿Los parámetros corresponden al ensamblaje de un genoma haploide o diploide?
+
+```bash
 Haploide vs Diploide: Los resultados corresponden a un genoma diploide. Hifiasm separa por defecto los dos alelos (haplotipos).
+```
 
+ ¿Qué nivel de eliminación de duplicaciones hemos aplicado? (El paso de eliminar duplicaciones sirve para que las zonas de alta heterocigosidad no sean ensambladas como contigs diferentes).
+```bash
 Purga de duplicaciones: Se ha aplicado el nivel de purga por defecto (Nivel 3), que elimina duplicaciones causadas por la heterocigosidad.
+```
 
+Si tuvieramos lecturas ultra-largas, ¿con qué opción o argumento añadiríamos esa información?
+```bash
 Lecturas ultra-largas: Si tuviéramos datos de Oxford Nanopore (UL), usaríamos el parámetro --ul.
-
+```
 :::
 ## Evaluación del resultado
 :::{.callout-note icon=false}
 # Ejercicio 3
+Consulta la descripción de los archivos de salida que encontrarás en este enlace y contesta las preguntas siguientes:
+
+¿Dónde están las secuencias que componen el ensamblaje?
+```bash
 Secuencias: Se guardan en formato GFA (Graphical Fragment Assembly). El archivo principal es At4.bp.p_ctg.gfa.
-
+```
+En los archivos .gfa, ¿qué son las líneas que empiezan por ‘A’?
+```bash
 Líneas 'A': Indican alineamientos o conexiones de lecturas que justifican la unión de dos fragmentos.
-
+```
+¿Qué información tiene los archivos .bed?
+```bash
 Archivos .bed: Contienen regiones de las lecturas que han sido filtradas o marcadas como repetitivas.
-
+```
+¿Cuál es la cobertura media estimada de las secuencias homocigotas? ¿Y la de las heterocigotas?
+```bash
 Cobertura: Hifiasm estima la cobertura de regiones homocigotas y heterocigotas comparando la abundancia de k-meros (esto se ve en el archivo hifiasm.log).
+```
 :::
 
 Los ensamblajes primario y por haplotipos se presentan en formato GFA. Para extraer las secuencias en formato FASTA podemos usar el pequeño script siguiente, en lenguaje AWK, desde el terminal de Bash:
@@ -139,30 +173,46 @@ awk '(/^S/){print ">" $2 "\n" $3}' asm1/At4.bp.p_ctg.gfa > asm1/At4.fa
 Para obtener las estadísticas del ensamblaje utilizaremos el programa compleasm (Huang and Li 2023), que no está instalado en el ordenador virtual. Está programado en Python y depende del módulo pandas de Python. En WSL, este módulo o paquete probablemente pueda instalarse con apt install python3-pandas. Alternativamente, en los sistemas con conda podéis hacer conda install pandas. En el ordenador virtual, el módulo pandas ya está disponible.
 
 ```{bash}
+#| label: ejecucion-compleasm
+#| eval: true
+
+# Ejecutamos el análisis solo si no existe el archivo de resumen
 if [ ! -e asm1_eval/summary.txt ]; then
    python3 ~/bin/compleasm_kit/compleasm.py run \
-      -t 2 -l brassicales -a asm1/At4.fa -o asm1_eval
+      -t 2 \
+      -l brassicales \
+      -a asm1/At4.fa \
+      -o asm1_eval
 fi
 ```
 
 En adelante supondré que compleasm.py está en ~/bin/compleasm_kit. El programa necesita descargar la lista de genes típica del linaje al que pertenece el ensamblaje. En nuestro caso, el linaje es el de las Brassicales. La orden siguiente puede tomar más de 10 minutos.
 
 ```{bash}
-if [ ! -e asm1_eval/summary.txt ]; then
-   python3 ~/bin/compleasm_kit/compleasm.py run \
-      -t 2 -l brassicales -a asm1/At4.fa -o asm1_eval
+#| label: visualizacion-calidad
+#| eval: true
+
+# Mostramos el contenido del resumen por pantalla para el informe
+if [ -f asm1_eval/summary.txt ]; then
+   cat asm1_eval/summary.txt
+else
+   echo "Esperando resultados... (Asegúrate de que el bloque anterior terminó con éxito)"
 fi
 ```
 
+```bash
+"El análisis de completitud con compleasm muestra un 16.17% de genes Single-copy y un 83.51% de genes desaparecidos (Missing). Este valor de Missing tan elevado es esperado, ya que no estamos ensamblando el genoma completo de Arabidopsis thaliana, sino una fracción centrada principalmente en el Cromosoma 4. Por tanto, la ausencia de la mayoría de los ortólogos universales de las Brassicales es coherente con los datos de partida."
+```
 :::{.callout-note icon=false}
 # Ejercicio 4
+Consulta la ayuda de compleasm.py y averigua qué significan los argumentos utilizados.
+
+```bash
 -t 2: Número de núcleos del procesador (threads).
-
 -l brassicales: Base de datos de genes específicos para plantas del orden Brassicales (Arabidopsis).
-
 -a: Archivo de entrada (nuestro ensamblaje At4.fa).
-
 -o: Carpeta de salida para los resultados.
+```
 :::
 
 ## Visualización del grafo
@@ -176,7 +226,7 @@ He visualizado el grafo del ensamblaje utilizando el programa Bandage. La red de
 ![](graph.png)
 :::
 
-# References
+# Bibliografía
 Huang, Neng, and Heng Li. 2023. “Compleasm: A Faster and More Accurate Reimplementation of BUSCO.” Bioinformatics 39 (10): btad595. https://doi.org/10.1093/bioinformatics/btad595.
 Melsted, P., and J. K. Pritchard. 2011. “Efficient Counting of k-Mers in DNA Sequences Using a Bloom Filter.” BMC Bioinformatics 12: 333. https://doi.org/10.1186/1471-2105-12-333.
 Rabanal, Fernando A, Maike Gräff, Christa Lanz, Katrin Fritschi, Victor Llaca, Michelle Lang, Pablo Carbonell-Bejerano, Ian Henderson, and Detlef Weigel. 2022. “Pushing the Limits of HiFi Assemblies Reveals Centromere Diversity Between Two Arabidopsis Thaliana Genomes.” Nucleic Acids Research 50 (21): 12309–27. https://doi.org/10.1093/nar/gkac1115.
