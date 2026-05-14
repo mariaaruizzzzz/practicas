@@ -58,7 +58,12 @@ gwas <- gwas[! is.na(gwas$P),]
 
 :::{.callout-note icon=false}
 ## Desafío
-La orden `read.table('gwas.txt')` no da error, pero es errónea. ¿Puedes arreglarla?
+
+#### La orden `read.table('gwas.txt')` no da error, pero es errónea. ¿Puedes arreglarla?
+
+```bash
+Al añadir header = TRUE, le indicamos a R que use la primera línea para nombrar las columnas. Además, al filtrar los valores NA con gwas[! is.na(gwas$P),], aseguramos que las filas con datos faltantes en el p-valor no nos den errores en las gráficas posteriores.
+```
 :::
 
 # Comprobar las suposiciones
@@ -80,23 +85,29 @@ forma esperas que adopte la gráfica en cada caso antes de representarla. Si en
 algún caso encuentras una relación diferente a la esperada, trata de explicarte
 por qué.
 
-1. El valor *p* sólo depende del estadístico *T*.
-:::
+#### El valor *p* sólo depende del estadístico *T*.
+
 ```{r}
 ggplot(gwas, aes(x=T_STAT, y=P)) + geom_line()
 ```
-2. El alelo A1 es siempre el que tiene la frecuencia más baja, en estos datos.
+#### El alelo A1 es siempre el que tiene la frecuencia más baja, en estos datos.
+
 ```{r}
 ggplot(gwas, aes(x=A1_FREQ)) + geom_histogram(breaks=c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6))
 ```
-3. El error estándar es menor cuanto mayor es el tamaño muestral.
+
+#### El error estándar es menor cuanto mayor es el tamaño muestral.
+
 ```{r}
 ggplot(gwas, aes(x=OBS_CT, y=SE)) + geom_point()
 ```
-4. La distribución de valores *p* se hace uniforme hacia la derecha.
+
+#### La distribución de valores *p* se hace uniforme hacia la derecha.
 ```{r}
 ggplot(gwas, aes(x=P)) + geom_histogram(bins=50)
 ```
+:::
+
 # Agrupación de datos
 Podemos mapear una variable categórica a un estético como el color,
 el tipo de línea o la forma del punto, para representar datos de
@@ -128,8 +139,9 @@ ggplot(data = gwas,
 
 :::{.callout-note icon=false}
 ## Desafíos
-1. Haz que no sólo las líneas, sino también los puntos tengan colores diferentes, que
-correspondan a los valores de OBS_CT, en la gráfica donde has usado `geom_smooth()`.
+
+#### Haz que no sólo las líneas, sino también los puntos tengan colores diferentes, que correspondan a los valores de OBS_CT, en la gráfica donde has usado `geom_smooth()`.
+
 ```{r}
 #| warning: false
 #| message: false
@@ -138,22 +150,36 @@ ggplot(data = gwas,
    geom_point(mapping = aes(color = factor(OBS_CT)), se = FALSE) +
    geom_smooth(mapping = aes(color = factor(OBS_CT)), se = FALSE)
 ```
-2. Añade una línea suavizada (`geom_smooth()`) a cada cromosoma en el gráfico anterior.
+
+#### Añade una línea suavizada (`geom_smooth()`) a cada cromosoma en el gráfico anterior.
+
 ```{r}
-# OBS_CT no es categórica, pero la tratamos como tal con "factor()".
-# Observa que el color aquí se mapea sólo en la capa "geom_smooth()",
-# para que los puntos sean todos negros.
-ggplot(data = gwas,
-       mapping = aes(x = A1_FREQ, y = SE, color = as.factor(OBS_CT))) +
-   geom_point() +
-   geom_smooth(aes(group = CHROM))
-```
-3. ¿Cómo puedes deshacerte de los mensajes de `geom_smooth()`?
 #| warning: false
 #| message: false
-4. ¿Para qué sirve la opción `scale = 'free'` en `facet_wrap()`?
-:::
+
+ggplot(data = gwas, 
+       mapping = aes(x = A1_FREQ, y = SE)) +
+   # Los puntos llevan el color de OBS_CT
+   geom_point(aes(color = factor(OBS_CT)), alpha = 0.4) + 
+   # La línea suavizada se agrupa por CHROM pero no lleva colores extra
+   geom_smooth(aes(group = CHROM), color = "black", method = "loess", se = FALSE) +
+   # Importante usar facetas para que no se amontonen todas las líneas en un solo cuadro
+   facet_wrap(~CHROM, scales = "free") +
+   theme_minimal()
+```
+#### ¿Cómo puedes deshacerte de los mensajes de `geom_smooth()`?
+
+```bash
+#| warning: false
+#| message: false
+```
+
+#### ¿Para qué sirve la opción `scale = 'free'` en `facet_wrap()`?
+```bash
 Esta función permite cada panel tenga su propia escala en los ejes. 
+```
+:::
+
 
 # Agrupación de datos y estadísticos
 Al examinar la relación entre el error estándar y el tamaño muestral, podemos
@@ -193,21 +219,33 @@ ggplot(data = gwas, aes(x = OBS_CT, y = SE)) +
 
 :::{.callout-note icon=false}
 ## Desafío
-1. ¿Para qué sirve la opción `position = 'jitter'`?
+
+
+#### ¿Para qué sirve la opción `position = 'jitter'`?
+
+```bash
 Sirve para añadir un pequeño desplazamiento aleatorio a los puntos en los ejes X e Y. Esto evita el solapamiento (overplotting) y permite ver la densidad real de los datos cuando muchos puntos caen en la misma posición.
+```
 
-2. ¿Por qué en la gráfica de violines teníamos que especificar `group = 1` y
-en la siguiente no, al representar la línea?
+#### ¿Por qué en la gráfica de violines teníamos que especificar `group = 1` y en la siguiente no, al representar la línea?
 
+```bash
 Porque al usar factor() en el eje X para los violines, aislamos los datos en grupos separados. Como una línea necesita unir puntos, group = 1 anula temporalmente esa separación para conectar todas las medias juntas. En gráficos donde el eje X es continuo (sin factor()), no hay grupos aislados, por lo que la línea se dibuja sola sin necesidad de especificarlo.
+```
 
-3. ¿Para qué sirve la función `factor()` al representar la gráfica de violines?
+#### ¿Para qué sirve la función `factor()` al representar la gráfica de violines?
+
+```bash
 Sirve para convertir una variable numérica en una variable categórica (discreta). Esto es un requisito obligatorio para que ggplot2 separe los datos en "cajas" y pueda dibujar un violín individual para cada valor. (Nota: La parte de "evitar el solapamiento" de tu borrador bórrala de aquí, eso es del jitter).
+```
 
-4. ¿Se te ocurre alguna otra manera de combinar datos y sus estadísticos (como la media)
-en un mismo gráfico, sin usar `stat_summary()`? ¿Qué método te gusta más?
+#### ¿Se te ocurre alguna otra manera de combinar datos y sus estadísticos (como la media) en un mismo gráfico, sin usar `stat_summary()`? ¿Qué método te gusta más?
+
+```bash
 Calculando los estadísticos previamente (por ejemplo, con las funciones de dplyr) y guardándolos en un segundo data frame. Luego, se añade ese nuevo data frame al gráfico original usando una nueva capa como geom_line(data = marco_resumen).
 - stat_summary() es más rápido y requiere menos código, pero crear un segundo data frame te da más control y seguridad si los cálculos estadísticos son complejos.
+```
+:::
 
 # Barras
 Si combinamos el alelo A1 con el OMITTED, clasificamos cada SNP en una de las 12
@@ -232,11 +270,32 @@ ggplot(data = gwas, mapping = aes(x= CHROM, fill = ALLELES)) +
 
 :::{.callout-note icon=false}
 ## Desafíos
-1. Genera una nueva variable categórica en `gwas` que indique si el SNP es una
-transición (AG, GA, CT, TC) o una transversión (los otros) y comprueba con un
-diagrama de barras si las proporciones son comparables entre cromosomas.
-2. Mira también si existe relación entre el tipo de mutación y la frecuencia
-alélica.
+
+```{r}
+# 1. Creamos la variable de tipo de mutación
+gwas$mut_type <- paste0(gwas$REF, gwas$ALT)
+
+# 2. Definimos las transiciones
+transiciones <- c("AG", "GA", "CT", "TC")
+
+# 3. Clasificamos cada SNP
+gwas$clase_mut <- ifelse(gwas$mut_type %in% transiciones, "Transition", "Transversion")
+
+# 4. Gráfico de barras por cromosoma (proporciones)
+ggplot(gwas, aes(x = as.factor(CHROM), fill = clase_mut)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Proporción de Ts/Tv por Cromosoma",
+       x = "Cromosoma", y = "Proporción", fill = "Tipo")
+
+# 5. Relación con la frecuencia alélica (A1_FREQ)
+ggplot(gwas, aes(x = clase_mut, y = A1_FREQ, fill = clase_mut)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_violin(alpha = 0.3) +
+  theme_minimal() +
+  labs(title = "Frecuencia Alélica vs Tipo de Mutación",
+       x = "Tipo de mutación", y = "Frecuencia Alelo A1")
+```
 :::
 
 # Gráficas de volcán
@@ -254,7 +313,15 @@ del paquete `qvalue` [@qvalue].
 [^1]: El valor *q* de un test es la proporción de falsos positivos que esperamos
    entre todos los resultados con un valor *p* menor o igual al de ese test.
 
+::: {.callout-important}
+## NOTA DE ENTREGA
+**PENDIENTE FINALIZACIÓN:** Me he quedado en esta parte de la práctica debido a que la versión de R del servidor (4.6.0) no es compatible con la versión actual del paquete `qvalue` en los repositorios disponibles, el siguiente código se presenta con fines ilustrativos pero no ha sido ejecutado para evitar errores de compilación. No me ha sido posible avanzar más en esta sesión.
+:::
+
+
 ```{r}
+#| label: volcano-plot
+#| eval: false
 library('qvalue')
 gwas$q <- qvalue(gwas$P)$qvalues
 ggplot(data = gwas,
@@ -267,8 +334,6 @@ ggplot(data = gwas,
                slope = 0, linewidth = 0.2, linetype = 2, color = 'black') +
    theme_minimal()
 ```
-
-
 
 
 :::{.callout-note icon=false}
@@ -322,3 +387,5 @@ ggplot(data = gwas, mapping = aes(x = GlobalPosition, y = -log(P), color = color
 ```{r}
 sessionInfo()
 ```
+
+# Referencias
