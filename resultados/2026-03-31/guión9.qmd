@@ -56,28 +56,29 @@ mtdna <- read.phyDat('../../data/mtDNA.fasta', format = 'fasta')
 Después de ejecutar el bloque anterior, habrás cargado los datos en el objeto de clase phyDat llamado mtdna. Puedes usar la consola de R para echarle un vistazo, por ejemplo con la función glance() o incluso para generar una imagen del alineamiento con image(). Si tienes instalado el paquete Biostrings (de Bioconductor), puedes crear un objeto de classe DNAStringSet con as.StringSet(mtDNA), al que se le pueden aplicar muchas otras funciones. Pero no es necesario.
 
 ::: {.callout-note icon="false"}
-## Ejercicio 1.
+## Ejercicio 1
 
-#### ¿Número de secuencias?
-
+¿Número de secuencias?
+```bash
 El objeto contiene 42 secuencias.
-
+```
 ```{r}
 length(mtdna)
 ```
 
-#### ¿Longitud del alineamiento?
-
+¿Longitud del alineamiento?
+```bash
 La longitud es de 16,603 posiciones.
+```
 
 ```{r}
 ncol(as.DNAbin(mtdna))
 ```
 
-#### ¿Función para nombres?
-
+¿Función para nombres?
+```bash
 Se utiliza la función names(mtdna) o mt_nj\$tip.label.
-
+```
 ```{r}
 names(mtdna)
 ```
@@ -98,24 +99,25 @@ mt_upgma <- upgma(distancias)
 ::: {.callout-note icon="false"}
 # Ejercicio 2:Estructura y visualización
 
-#### Para qué sirven las funciones `add.scale.bar()` y `axisPhylo()`?
-
+¿Para qué sirven las funciones `add.scale.bar()` y `axisPhylo()`?
+```bash
 add.scale.bar() añade una barra que indica la escala de sustituciones por sitio. axisPhylo() dibuja un eje con la distancia evolutiva en la base del gráfico.
+```
 
-#### ¿De qué clase son los objetos `mt_nj` y `mt_upgma`?
+¿De qué clase son los objetos `mt_nj` y `mt_upgma`?
 
 ```{r}
 class(mt_nj)
 class(mt_upgma)
 ```
 
-#### Consulta la estructura de estos objetos (`str(mt_nj)`).
+Consulta la estructura de estos objetos (`str(mt_nj)`).
 
 ```{r}
 str(mt_nj)
 ```
 
-#### Represéntalos gráficamente (`plot(mt_nj)`) y consulta la ayuda de la función `plot.phylo()` para saber qué opciones de representación gráfica tienes.
+Represéntalos gráficamente (`plot(mt_nj)`) y consulta la ayuda de la función `plot.phylo()` para saber qué opciones de representación gráfica tienes.
 
 ```{r}
 plot(mt_nj)
@@ -151,7 +153,7 @@ mt_nj_rooted <- root(mt_nj, outgroup = 'G.gorilla_D38114')
 ```
 
 ```{r}
-mt_nj_rooted <- midpoint(mt_nj)
+plot(mt_nj_rooted, main = "Árbol NJ enraizado usando Gorila como Outgroup")
 ```
 
 ## En el punto medio
@@ -186,20 +188,22 @@ A continuación se escoge la posición de la raíz que optimiza la regresión en
 
 ```{r}
 mt_nj_rtt <- rtt(mt_nj, tip.dates = fechas, objective = 'rms')
+plot(mt_nj_rtt, align.tip.label = TRUE, main = "Árbol NJ enraizado por Regresión Root-to-Tip (RTT)")
+add.scale.bar()
 ```
 
 ::: {.callout-note icon="false"}
 ## Ejercicio 3: Regresión RTT
 
-#### ¿Se corresponden bien las distancias con las dataciones?
+¿Se corresponden bien las distancias con las dataciones?
 
 Sí, en general las secuencias más antiguas acumulan más cambios que las modernas, mostrando una correspondencia aproximada.
 
-#### ¿Qué secuencias se ajustan menos a su edad?
+¿Qué secuencias se ajustan menos a su edad?
 
 Algunas secuencias arcaicas, principalmente neandertales y denisovanas, muestran más o menos cambios de lo esperado.
 
-#### ¿Por qué puede haber discrepancias?
+¿Por qué puede haber discrepancias?
 
 Por variación en la tasa de evolución, errores en datación o secuenciación, efectos demográficos, selección natural o saturación de mutaciones.
 :::
@@ -233,7 +237,7 @@ mean(distMat[modernos, neandertales])
 ::: {.callout-note icon="false"}
 ## Ejercicio 4: Comparativa de distancias
 
-#### Calcula las distancias medias entre todos los grupos.
+## Calcula las distancias medias entre todos los grupos.
 
 ```{r}
 mean(distMat[modernos, neandertales])  
@@ -259,7 +263,7 @@ z[z == 0] <- NA
 mean(z, na.rm = TRUE)
 ```
 
-#### ¿Cuántas veces mayor es la distancia entre humanos y chimpancés que entre humanos y neandertales?
+## ¿Cuántas veces mayor es la distancia entre humanos y chimpancés que entre humanos y neandertales?
 
 ```{r}
 dist_hum_nean <- mean(distMat[modernos, neandertales])
@@ -275,7 +279,7 @@ dist_hum_chimp
 dist_hum_chimp / dist_hum_nean
 ```
 
-```         
+```bash         
 Resultados obtenidos:
 
     Distancia media Humano-Neandertal: 0.0121
@@ -284,15 +288,16 @@ Resultados obtenidos:
 
     Proporción calculada: 7.49
 ```
+```bash
+La distancia genética entre humanos y chimpancés es aproximadamente 7.5 veces mayor que la que nos separa de los neandertales. Esto confirma que los neandertales son genéticamente mucho más próximos a los humanos modernos que cualquier otro primate vivo, situándose a una distancia evolutiva relativamente pequeña.
+```
 
-Interpretación: La distancia genética entre humanos y chimpancés es aproximadamente 7.5 veces mayor que la que nos separa de los neandertales. Esto confirma que los neandertales son genéticamente mucho más próximos a los humanos modernos que cualquier otro primate vivo, situándose a una distancia evolutiva relativamente pequeña.
-
-#### ¿Cómo calcularías la distancia media entre dos secuencias de humanos modernos?
+## ¿Cómo calcularías la distancia media entre dos secuencias de humanos modernos?
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Solución"
-#| eval: false
+#| eval: true
 # La submatriz siguiente contiene ceros en la diagonal. Si queremos excluir
 # del cálculo de la media las distancias entre cada secuencia consigo misma,
 # habrá que tenerlo en cuenta:
@@ -303,7 +308,7 @@ z <- distMat[modernos, modernos]
 z[z == 0] <- NA
 mean(z, na.rm = TRUE)
 ```
-:::
+
 
 ```{r}
 #| echo: false
@@ -325,6 +330,7 @@ text(0.0120, 1000, 'Modernos-Neandertales')
 text(0.0175, 1500, 'Modernos-Heidelbergensis')
 text(0.024, 1000, 'Modernos-Denisovanos')
 ```
+:::
 
 Las distancias estimadas no son exactas. Cuanto mayor es la distancia, mayor es el error en la estimación. Además el modelo disponible podia no ser el adecuado. Pero nos ayudan a estimar el tiempo transcurrido desde que dos linajes se separaron, si asumimos el *reloj molecular*. Por ejemplo, estas distancias sugieren que los humanos modernos divergieron de los neandertales hace una cantidad de tiempo aproximadamente igual al 13.3% del tiempo que nos separa de los chimpancés, que podrían ser más de 850000 años si del chimpancé nos separan 6.5 millones de años.
 
@@ -337,12 +343,12 @@ distCofen <- cophenetic(mt_nj_rooted)
 ::: {.callout-note icon="false"}
 ## Ejercicio 5
 
-#### ¿Cuánto se parecen las distancias estimadas a las distancias cofenéticas?
+## ¿Cuánto se parecen las distancias estimadas a las distancias cofenéticas?
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Solución"
-#| eval: false
+#| eval: true
 # Aquí usamos las matricees como vectores:
 plot(distMat, distCofen, xlab = 'Distancias F81', ylab = 'Dist. cofenéticas')
 abline(a = 0, b = 1, col = 'red', lty = 2)
@@ -385,7 +391,7 @@ mtdna37
 ```{r}
 #| code-fold: true
 #| code-summary: "Solución"
-#| eval: false
+#| eval: true
 mtdna28 <- mtdna37[grepl('^H.', names(mtdna37)), ]
 ```
 :::
