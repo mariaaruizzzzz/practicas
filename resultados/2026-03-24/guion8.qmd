@@ -3,7 +3,7 @@ title: "Práctica 8. BLAST"
 lang: es
 date: today
 execute: 
-  eval: false
+  eval: true
   error: true
 engine: knitr
 bibliography: ../../doc/references.bib
@@ -138,14 +138,16 @@ seleccionaremos las parejas de proteínas que sean recíprocamente las más simi
 una de otra, por ser más probablemente ortólogas. Otras relaciones de semejanza
 no recíprocas pueden ser debidas a la paralogía.
 
-### De *Buchnera aphidicola* hacia *Blochmannia ocreatus*
-### De *Blochmannia ocreatus* hacia *Buchnera aphidicola*
+# 1. De *Buchnera aphidicola* hacia *Blochmannia ocreatus*
+# 2. De *Blochmannia ocreatus* hacia *Buchnera aphidicola*
 
 
 ```{bash}
 #| eval: true
 #| output: true
 #| error: true
+#| warning: false
+#| message: false
 
 # De Buchnera contra Blochmannia
 /home/VMAULES/ruizven2/bin/ncbi-blast-2.17.0+/blastp -query /home/VMAULES/ruizven2/bioinfo/practicas/data/Buchnera.fa -db /home/VMAULES/ruizven2/bioinfo/practicas/data/blochmannia -out buc2blo.txt -outfmt '6 qseqid sseqid qlen slen length evalue bitscore' -evalue 0.001 -max_target_seqs 1
@@ -195,7 +197,6 @@ Para identificar las parejas de proteínas que son recíprocamente las más pare
 
 En este análisis, hemos identificado un total de 404 parejas de proteínas que cumplen esta condición de reciprocidad, lo que sugiere que son genes ortólogos que han conservado su función tras la especiación.
 ```
-:::
 
 ```{r}
 #| code-fold: true
@@ -208,7 +209,9 @@ coincidencias <- buc2blo[
    buc2blo$query == buc2blo$reverse,
    c('query', 'subject')
 ]
+head(coincidencias, n = 10)
 ```
+:::
 
 :::{.callout-note icon=false}
 ¿Qué datos te gustaría representar gráficamente para ganar confianza en que los
@@ -244,6 +247,8 @@ y compara los resultados.
 #| eval: true
 #| output: true
 #| error: true
+#| warning: false
+#| message: false
 
 # 1. Extraer la secuencia de la proteína P30314
 /home/VMAULES/ruizven2/bin/ncbi-blast-2.17.0+/blastdbcmd \
